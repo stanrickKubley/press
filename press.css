@@ -1,0 +1,110 @@
+/* Press page — styled to match mindykober.com: cream page, dark olive text,
+   Source Code Pro (light) for text, Abel for her name and headlines. All of the look lives in this file. */
+/* Layout: her site's header on top; one column below where each image pairs with its text, alternating sides. */
+:root {
+  --paper: #feffe9;      /* page — same cream as her site */
+  --ink: #2e3105;        /* text and links — same dark olive */
+  --muted: #6f7147;      /* dates, captions */
+  --rule: #e2e3c4;       /* dividers */
+  --pigment: #2e3105;    /* links: same color as text, underlined (as on her site) */
+  --frame: #111214;      /* optional thin black line around an image */
+  --font-text: "Source Code Pro", ui-monospace, Menlo, Consolas, monospace;
+  --font-display: "Abel", "Helvetica Neue", Arial, sans-serif;
+  --font-label: "Source Code Pro", ui-monospace, Menlo, Consolas, monospace;
+  --measure: 1600px;    /* her site runs near full width; this only caps very large screens */
+  --gutter: max(16px, 4vw);   /* her side margins: 4% of the window (48px on a laptop) */
+  color-scheme: light;
+}
+
+body { background: var(--paper); color: var(--ink); font-family: var(--font-text); font-weight: 300; font-size: 1rem; line-height: 1.7; margin: 0; }
+.pf-page { max-width: var(--measure); margin: 0 auto; padding-block: 0;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+
+/* Her site's header: name on the left, the same menu on the right. */
+.pf-site { display: flex; justify-content: space-between; align-items: center; gap: 1rem 2rem; flex-wrap: wrap; min-height: 102px; margin-bottom: 48px; }
+.pf-name { font-family: var(--font-display); font-size: 1.9rem; line-height: 1.4; color: var(--ink); text-decoration: none; }
+.pf-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 3.6rem; }
+.pf-ig { display: inline-flex; margin-left: 0.6rem; border: 0 !important; color: var(--ink); }
+.pf-ig svg { width: 18px; height: 18px; display: block; }
+.pf-nav a { font-size: 1rem; color: var(--ink); text-decoration: none; padding-bottom: 2px; border-bottom: 1px solid transparent; }
+.pf-nav a:hover, .pf-nav a[aria-current="page"] { border-bottom-color: var(--ink); }
+.pf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+a { color: var(--pigment); text-underline-offset: 0.18em; }
+.pf-feed { display: grid; gap: 7rem; }
+.pf-post { display: grid; gap: 2rem; }
+.pf-post header { display: grid; gap: 0.4rem; }
+.pf-kicker { font-family: var(--font-label); font-size: 0.85rem; color: var(--muted); margin: 0; }
+.pf-kicker a { color: inherit; }
+.pf-post h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.25; margin: 0; text-wrap: balance; }
+.pf-post h2 a { color: inherit; }
+
+/* Image beside text. Size sets the image's share of the row: small ≈ 1/3, medium ≈ 1/2, large ≈ 2/3. */
+.pf-row { display: grid; --img: 5fr; --txt: 6fr; grid-template-columns: minmax(0, var(--img)) minmax(0, var(--txt)); gap: 2.5rem; align-items: start; }
+.pf-row.pf-xsmall { --img: 1fr; --txt: 3fr; }
+.pf-row.pf-small { --img: 1fr; --txt: 2fr; }
+.pf-row.pf-large { --img: 2fr; --txt: 1fr; }
+.pf-row.pf-img-right { grid-template-columns: minmax(0, var(--txt)) minmax(0, var(--img)); }
+.pf-row.pf-img-right .pf-fig { order: 2; }
+/* Full width always spans the column. Center sits on its own line at a third, half or two-thirds. */
+.pf-center { justify-self: center; width: 50%; }
+.pf-center.pf-xsmall { width: 25%; }
+.pf-center.pf-small { width: 33.333%; }
+.pf-center.pf-large { width: 66.667%; }
+.pf-text { min-width: 0; }  /* beside an image, text fills its column right up to the gap */
+.pf-text > * { margin: 0 0 1em; }
+.pf-text > :last-child { margin-bottom: 0; }
+.pf-text h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.2rem; line-height: 1.3; margin-top: 1.5em; }
+.pf-text > h3:first-child { margin-top: 0; }
+.pf-text ul, .pf-text ol { padding-left: 1.25em; }
+.pf-text li + li { margin-top: 0.3em; }
+.pf-text blockquote { padding-left: 1.1em; border-left: 2px solid var(--rule); font-style: italic; font-size: 1.15em; line-height: 1.5; }
+.pf-text blockquote p { margin: 0 0 0.6em; }
+.pf-text blockquote p:last-child { margin-bottom: 0; }
+.pf-solo { max-width: 40rem; }
+
+.pf-fig { margin: 0; display: grid; gap: 0.4rem; }
+.pf-fig img { display: block; width: 100%; height: auto; max-width: 100%; }
+.pf-border img { outline: 1px solid var(--frame); outline-offset: -1px; } /* optional thin black line */
+.pf-fig figcaption { font-family: var(--font-text); font-size: 1rem; font-weight: 300; line-height: 1.7; color: var(--ink); }
+.pf-full img { width: 100%; }
+/* Images with no text beside them: a row, each image sized by its own setting. */
+.pf-gallery { --g: 24px; display: flex; flex-wrap: wrap; gap: var(--g); align-items: flex-start; }
+.pf-gallery.pf-align-right { justify-content: flex-end; }
+.pf-gallery > .pf-xsmall { width: calc((100% - 3 * var(--g)) / 4); }
+.pf-gallery > .pf-small { width: calc((100% - 2 * var(--g)) / 3); }
+.pf-gallery > .pf-medium { width: calc((100% - var(--g)) / 2); }
+.pf-gallery > .pf-large { width: calc((100% - 2 * var(--g)) / 3 * 2 + var(--g)); }
+
+.pf-empty { color: var(--muted); font-style: italic; }
+
+/* Auto-sized group of images: one row, all the same height. */
+.pf-justify { display: flex; gap: 24px; align-items: flex-start; max-width: 100%; }
+.pf-justify.pf-align-right { margin-left: auto; }
+.pf-justify > .pf-fig { min-width: 0; }
+.pf-justify > .pf-fig img { width: 100%; }
+
+/* Footer, same as her site: "© 2026 MINDY KOBER" in her name's font. */
+.pf-footer { margin-top: 7rem; padding-block: 4.5rem; }
+.pf-footer p { margin: 0; font-family: var(--font-display); font-size: 1.55rem; line-height: 1.3; font-weight: 400; }
+
+/* Phones: everything stacks into one column. */
+@media (max-width: 560px) {
+  .pf-page { padding-block: 0; }
+  .pf-site { min-height: 0; padding-top: 1.5rem; }
+  .pf-site { margin-bottom: 2.5rem; }
+  .pf-nav { gap: 0.4rem 1.6rem; }
+  .pf-row, .pf-row.pf-img-right { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .pf-row.pf-img-right .pf-fig { order: 0; }
+  .pf-row.pf-small .pf-fig { width: 60%; }
+  .pf-row.pf-xsmall .pf-fig { width: 45%; }
+  .pf-center { width: 100%; }
+  .pf-center.pf-small { width: 60%; }
+  .pf-center.pf-xsmall { width: 45%; }
+  .pf-gallery { --g: 1rem; }
+  .pf-justify { gap: 12px; width: 100% !important; }
+  .pf-gallery > .pf-small, .pf-gallery > .pf-xsmall { width: calc((100% - var(--g)) / 2); }
+  .pf-gallery > .pf-medium, .pf-gallery > .pf-large { width: 100%; }
+  .pf-feed { gap: 4.5rem; }
+  .pf-footer { margin-top: 4.5rem; padding-block: 3rem; }
+}

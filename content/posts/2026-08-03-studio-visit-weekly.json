@@ -1,0 +1,28 @@
+{
+  "publication": "Studio Visit Weekly",
+  "date": "2026-08-03",
+  "show_date": false,
+  "link": "https://example.com/studio-visit",
+  "body": "A studio visit and interview about the orchard series, and why the paintings are hung salon-style while they're in progress.",
+  "images": [
+    {
+      "image": "/images/uploads/studio-wall.jpg",
+      "placement": "full",
+      "caption": "The studio in July",
+      "size": "auto",
+      "w": 1600,
+      "h": 900
+    },
+    {
+      "image": "/images/uploads/orchard-no-4.jpg",
+      "placement": "left",
+      "caption": "Orchard No. 4, oil on canvas",
+      "size": "auto",
+      "w": 1400,
+      "h": 1050
+    }
+  ],
+  "show_publication": true,
+  "show_title": true,
+  "start_side": "left"
+}
