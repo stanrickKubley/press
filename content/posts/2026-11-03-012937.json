@@ -20,7 +20,7 @@
     {
       "image": "/images/uploads/20261102-175120-0-hangar.png",
       "placement": "auto",
-      "size": "auto",
+      "size": "small",
       "border": true,
       "caption": "",
       "w": 1376,
@@ -29,7 +29,7 @@
     {
       "image": "/images/uploads/20261102-175120-1-screenshot-2026-10-28-at-2-30-19-pm.png",
       "placement": "auto",
-      "size": "auto",
+      "size": "small",
       "border": true,
       "caption": "",
       "w": 2448,
@@ -38,7 +38,7 @@
     {
       "image": "/images/uploads/20261102-175120-2-screenshot-2026-10-28-at-2-46-04-pm.png",
       "placement": "auto",
-      "size": "auto",
+      "size": "xsmall",
       "border": true,
       "caption": "",
       "w": 2502,
