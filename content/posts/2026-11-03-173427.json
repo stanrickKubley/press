@@ -19,7 +19,7 @@
     {
       "image": "/images/uploads/20261103-093417-1-dang-bg-concepts02-rev2-brown-wblueshadow.jpg",
       "placement": "auto",
-      "size": "auto",
+      "size": "small",
       "border": true,
       "caption": "",
       "w": 3000,
@@ -28,7 +28,7 @@
     {
       "image": "/images/uploads/20261103-093417-2-dangsplashimagefinal.jpg",
       "placement": "auto",
-      "size": "auto",
+      "size": "xsmall",
       "border": true,
       "caption": "",
       "w": 2382,
