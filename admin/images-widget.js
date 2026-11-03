@@ -29,6 +29,7 @@
     ".pi-input{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:9px 10px;border:1px solid #cfd2d8;border-radius:4px}" +
     ".pi-add{margin-top:12px;font:inherit;font-size:15px;padding:12px 16px;width:100%;border-radius:6px;border:1px dashed #1d1f22;background:#fff;color:#1d1f22;cursor:pointer}" +
     ".pi-add:hover{background:#f6f7f9}.pi-add:disabled{opacity:.6;cursor:progress}" +
+    ".pi-error{margin-top:8px;font-size:14px;color:#a4262c}" +
     ".pi-empty{font-size:14px;color:#6b6e72;padding:6px 0 0}";
 
   function injectCSS() {
@@ -48,8 +49,11 @@
 
   window.PressImagesControl = function () {
     return createClass({
-      getInitialState: function () { return { open: {}, busy: 0 }; },
-      componentDidMount: injectCSS,
+      getInitialState: function () { return { open: {}, busy: 0, failed: 0 }; },
+      componentDidMount: function () {
+        var self = this; injectCSS();
+        if (window.PressAsset) this.unlisten = window.PressAsset.onChange(function () { if (self.alive !== false) self.forceUpdate(); });
+      },
       ids: function () {
         var base = this.props.forID || "images";
         return { add: base + "-add", replace: base + "-replace" };
@@ -85,6 +89,7 @@
         }
       },
       componentWillUnmount: function () {
+        this.alive = false; if (this.unlisten) this.unlisten();
         if (this.props.onRemoveMediaControl) { var ids = this.ids(); this.props.onRemoveMediaControl(ids.add); this.props.onRemoveMediaControl(ids.replace); }
       },
       // Add photos with the device's own picker (several at once). They are appended after the existing images.
@@ -121,21 +126,22 @@
       uploadFiles: function (files, replaceIndex) {
         var self = this, list = Array.prototype.slice.call(files || []).filter(function (f) { return /^image\//.test(f.type); });
         if (!list.length) return;
-        this.setState({ busy: list.length });
-        var paths = [], dimsOf = {};
+        this.setState({ busy: list.length, failed: 0 });
+        var paths = [], dimsOf = {}, failed = 0;
         var next = function (k) {
           if (k >= list.length) return Promise.resolve();
           return self.prepare(list[k], k).then(function (f) {
             return Promise.resolve(self.props.onPersistMedia(f, { field: self.props.field })).then(function (res) {
               var pl = res && res.payload, rp = pl && (pl.path || (pl.file && pl.file.path));
+              if (!pl) throw new Error("upload failed");
               var pub = self.publicPath(rp, f.name);
               paths.push(pub); dimsOf[pub] = { w: f.pressW, h: f.pressH };
               try { var bu = URL.createObjectURL(f); (self.local || (self.local = {}))[pub] = bu; (window.PRESS_LOCAL || (window.PRESS_LOCAL = {}))[pub] = bu; } catch (e) {}
             });
-          }).catch(function () {}).then(function () { self.setState({ busy: list.length - k - 1 }); return next(k + 1); });
+          }).catch(function (e) { failed++; if (window.console) console.warn("Press: image upload failed", list[k] && list[k].name, e); }).then(function () { self.setState({ busy: list.length - k - 1 }); return next(k + 1); });
         };
         next(0).then(function () {
-          self.setState({ busy: 0 });
+          self.setState({ busy: 0, failed: failed });
           if (!paths.length) return;
           var items = toArr(self.props.value), open = Object.assign({}, self.state.open);
           var withDims = function (o, p) { var d = dimsOf[p] || {}; if (d.w && d.h) { o.w = d.w; o.h = d.h; } else { delete o.w; delete o.h; } return o; };
@@ -168,14 +174,8 @@
       url: function (p) {
         if (!p) return "";
         if (this.local && this.local[p]) return this.local[p]; // photo picked this session: show the copy in the browser
+        if (window.PressAsset) { window.PressAsset.ensure(p); return window.PressAsset.url(p); }
         try { return new URL(p, document.baseURI).href; } catch (e) { return p; }
-      },
-      fallback: function (p) {
-        var self = this;
-        return function (e) {
-          var el = e.target; if (el.dataset.fell === p) return; el.dataset.fell = p;
-          try { var a = self.props.getAsset(p, self.props.field); var u = a ? String(a.url || a.toString() || "") : ""; if (u) el.src = u; } catch (err) {}
-        };
       },
       setDims: function (i, path, w, h) {
         var items = toArr(this.props.value);
@@ -205,7 +205,7 @@
         var src = this.url(img.image);
         var stop = function (fn) { return function (e) { e.stopPropagation(); fn(); }; };
         var head = h("div", { className: "pi-head", onClick: function () { self.toggle(i); }, "aria-expanded": open },
-          src ? h("img", { key: "t-" + img.image, className: "pi-thumb", src: src, alt: "", "aria-hidden": true, onError: this.fallback(img.image),
+          src ? h("img", { key: "t-" + img.image, className: "pi-thumb", src: src, alt: "", "aria-hidden": true,
               onLoad: function (e) { var el = e.target; if (!(img.w > 0 && img.h > 0) && el.naturalWidth) self.setDims(i, img.image, el.naturalWidth, el.naturalHeight); } })
               : h("div", { className: "pi-thumb", "aria-hidden": true }),
           h("div", { className: "pi-sum" },
@@ -227,7 +227,7 @@
           h("div", null,
             h("div", { className: "pi-label" }, "Image"),
             h("div", { className: "pi-preview" },
-              src ? h("img", { key: "p-" + img.image, src: src, alt: "", onError: this.fallback(img.image) }) : null,
+              src ? h("img", { key: "p-" + img.image, src: src, alt: "" }) : null,
               h("button", { type: "button", className: "pi-btn", onClick: function () { self.pick(false, i); } },
                 src ? "Replace image" : "Choose image"))),
           h("div", null,
@@ -253,7 +253,9 @@
           items.length ? h("div", { className: "pi-list" }, items.map(function (img, i) { return self.card(img, i, items.length); }))
                        : h("div", { className: "pi-empty" }, "No images yet."),
           h("button", { type: "button", className: "pi-add", disabled: !!this.state.busy, onClick: function () { self.pick(true); } },
-            this.state.busy ? "Adding photos… " + this.state.busy + " to go" : "+ Add images (pick as many as you like)"));
+            this.state.busy ? "Adding photos… " + this.state.busy + " to go" : "+ Add images (pick as many as you like)"),
+          this.state.failed ? h("div", { className: "pi-error", role: "alert" },
+            (this.state.failed === 1 ? "One photo" : this.state.failed + " photos") + " didn't upload. Check the connection and try adding " + (this.state.failed === 1 ? "it" : "them") + " again.") : null);
       }
     });
   };

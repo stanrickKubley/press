@@ -56,15 +56,15 @@
   CMS.registerPreviewStyle(window.PRESS_CSS || "press.css", window.PRESS_CSS ? { raw: true } : undefined);
 
   var Preview = createClass({
+    componentDidMount: function () { var self = this; this.unlisten = window.PressAsset.onChange(function () { self.forceUpdate(); }); },
+    componentWillUnmount: function () { if (this.unlisten) this.unlisten(); },
     render: function () {
-      var getAsset = this.props.getAsset;
       var data = this.props.entry.get("data");
       var post = data && data.toJS ? data.toJS() : {};
       var resolve = function (p) {
         if (!p) return "";
-        var a = getAsset(p);
-        var url = a ? String(a.url || a.toString()) : p;
-        try { return new URL(url, document.baseURI).href; } catch (e) { return url; }
+        window.PressAsset.ensure(p);
+        return window.PressAsset.url(p);
       };
       var html = window.PressRender.postHTML(post, resolve);
       return h("div", { className: "pf-page", style: { paddingTop: "2.5rem" } },

@@ -101,15 +101,10 @@
         var entry = typeof p.getEntry === "function" ? p.getEntry() : p.entry;
         var data = entry && entry.get ? entry.get("data") : null;
         var post = data && data.toJS ? data.toJS() : {};
-        var resolve = function (path) {
-          if (!path) return "";
-          if (window.PRESS_LOCAL && window.PRESS_LOCAL[path]) return window.PRESS_LOCAL[path];
-          var u = "";
-          try { var a = p.getAsset(path, p.field); u = a ? String(a.url || a.toString() || "") : ""; } catch (e) {}
-          if (!/^(blob|data):/.test(u)) u = path;
-          try { return new URL(u, document.baseURI).href; } catch (e) { return u; }
-        };
-        open(post, resolve);
+        var resolve = function (path) { return path ? window.PressAsset.url(path) : ""; };
+        // Wait until every image is found (draft images come from GitHub), then open.
+        var paths = (post.images || []).map(function (i) { return i && i.image; }).filter(Boolean);
+        Promise.all(paths.map(function (x) { return window.PressAsset.ensure(x); })).then(function () { open(post, resolve); });
       },
       render: function () {
         var self = this;
