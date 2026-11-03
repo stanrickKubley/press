@@ -18,13 +18,31 @@
       "h": 1016
     },
     {
-      "image": "/images/uploads/20261102-173312-0-tokyo.png",
+      "image": "/images/uploads/20261102-175120-0-hangar.png",
       "placement": "auto",
       "size": "auto",
       "border": true,
       "caption": "",
-      "w": 1672,
-      "h": 941
+      "w": 1376,
+      "h": 768
+    },
+    {
+      "image": "/images/uploads/20261102-175120-1-screenshot-2026-10-28-at-2-30-19-pm.png",
+      "placement": "auto",
+      "size": "auto",
+      "border": true,
+      "caption": "",
+      "w": 2448,
+      "h": 1404
+    },
+    {
+      "image": "/images/uploads/20261102-175120-2-screenshot-2026-10-28-at-2-46-04-pm.png",
+      "placement": "auto",
+      "size": "auto",
+      "border": true,
+      "caption": "",
+      "w": 2502,
+      "h": 1438
     }
   ],
   "link": "https://www.curiouspublishing.org/ill-poetry-anthology"
