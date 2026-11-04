@@ -104,3 +104,6 @@ input[type=date]::-webkit-date-and-time-value { text-align: left; }
 .pc-logout { font: inherit; font-size: 14px; color: var(--pt-muted); background: none; border: 0; padding: 6px 0 6px 16px; margin-left: 0;
   border-left: 1px solid var(--pt-rule); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
 .pc-logout:hover { color: var(--pt-ink); }
+/* Greeting in bold; on phones, room between it and the Contents/Media row. */
+[class*='-AppHeaderActions']::before { font-weight: 700; }
+@media (max-width: 799px) { [class*='-AppHeaderActions'] { padding-top: 6px; padding-bottom: 12px; } }
