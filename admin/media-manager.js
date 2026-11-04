@@ -143,15 +143,21 @@
     function load() {
       busy = true; refreshButtons();
       return token().then(function (tok) {
-        return Promise.all([
-          api(tok, "contents/" + MEDIA_DIR + "?ref=main").catch(function (e) { if (e.status === 404) return []; throw e; }),
-          api(tok, "contents/" + POSTS_DIR + "?ref=main").catch(function (e) { if (e.status === 404) return []; throw e; })
-        ]).then(function (res) {
-          var files = (res[0] || []).filter(function (f) { return f.type === "file" && /\.(png|jpe?g|webp|gif|svg|heic)$/i.test(f.name); });
-          var posts = (res[1] || []).filter(function (f) { return /\.json$/.test(f.name); });
+        // Read the latest version by its exact id (the folder-listing API can serve a stale copy for a minute).
+        return api(tok, "git/refs/heads/main").then(function (ref) {
+          return api(tok, "git/commits/" + ref.object.sha);
+        }).then(function (commit) {
+          return api(tok, "git/trees/" + commit.tree.sha + "?recursive=1");
+        }).then(function (full) {
+          var blobs = (full.tree || []).filter(function (e) { return e.type === "blob"; });
+          var files = blobs.filter(function (e) {
+            return e.path.indexOf(MEDIA_DIR + "/") === 0 && e.path.slice(MEDIA_DIR.length + 1).indexOf("/") < 0 &&
+              /\.(png|jpe?g|webp|gif|svg|heic)$/i.test(e.path);
+          });
+          var posts = blobs.filter(function (e) { return e.path.indexOf(POSTS_DIR + "/") === 0 && /\.json$/.test(e.path); });
           return Promise.all(posts.map(function (p) {
-            return api(tok, "contents/" + p.path + "?ref=main").then(function (c) {
-              try { return JSON.parse(decode(c.content)); } catch (e) { return null; }
+            return api(tok, "git/blobs/" + p.sha).then(function (b) {
+              try { return JSON.parse(decode(b.content)); } catch (e) { return null; }
             }).catch(function () { return null; });
           })).then(function (entries) {
             var usedBy = {};
@@ -165,7 +171,8 @@
               });
             });
             items = files.map(function (f) {
-              return { name: f.name, path: f.path, pub: PUBLIC_DIR + "/" + f.name, used: usedBy[f.name] || [] };
+              var name = f.path.split("/").pop();
+              return { name: name, path: f.path, pub: PUBLIC_DIR + "/" + name, used: usedBy[name] || [] };
             }).sort(function (a, b) { return (a.used.length > 0) - (b.used.length > 0) || b.name.localeCompare(a.name); });
             selected = {};
           });
