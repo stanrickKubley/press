@@ -39,10 +39,10 @@
     ".mm-note{padding:10px 16px;font-size:14px;color:#6f7147;border-bottom:1px solid #d9dab4}" +
     ".mm-note.mm-err{color:#a4262c}.mm-note.mm-ok{color:#2e3105}" +
     ".mm-grid{overflow:auto;-webkit-overflow-scrolling:touch;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}" +
-    ".mm-card{position:relative;display:flex;flex-direction:column;background:#fff;border:2px solid #d9dab4;border-radius:6px;overflow:hidden;cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit}" +
+    ".mm-card{position:relative;display:flex;flex-direction:column;height:auto;align-self:start;background:#fff;border:2px solid #d9dab4;border-radius:6px;overflow:hidden;cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit}" +
     ".mm-card.mm-used{cursor:default}.mm-card.mm-on{border-color:#a4262c;box-shadow:0 0 0 2px #a4262c}" +
-    ".mm-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f4f4ea}" +
-    ".mm-meta{padding:8px 9px;font-size:12px;line-height:1.35;min-width:0}" +
+    ".mm-card img{display:block;flex:none;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f4f4ea}" +
+    ".mm-meta{display:block;flex:none;padding:8px 9px;font-size:12px;line-height:1.35;min-width:0}" +
     ".mm-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6f7147}" +
     ".mm-use{margin-top:3px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}" +
     ".mm-unused .mm-use{color:#8a6d0b}" +
@@ -108,8 +108,9 @@
       if (!items.length) { grid.appendChild(el("div", "mm-empty", "No images uploaded yet.")); return; }
       items.forEach(function (it) {
         var used = it.used.length > 0;
-        var card = el("button", "mm-card" + (used ? " mm-used" : " mm-unused") + (selected[it.path] ? " mm-on" : ""));
-        card.type = "button";
+        // A div, not a <button>: Decap's button styles squash the card and hide the label.
+        var card = el("div", "mm-card" + (used ? " mm-used" : " mm-unused") + (selected[it.path] ? " mm-on" : ""));
+        card.setAttribute("role", "button"); card.tabIndex = used ? -1 : 0;
         if (used) card.setAttribute("aria-disabled", "true");
         card.setAttribute("aria-pressed", selected[it.path] ? "true" : "false");
         card.title = it.name;
@@ -128,6 +129,7 @@
         use.style.display = "block";
         meta.appendChild(use);
         card.appendChild(meta);
+        card.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); card.onclick(); } };
         card.onclick = function () {
           if (used || busy) return;
           if (selected[it.path]) delete selected[it.path]; else selected[it.path] = it;
@@ -226,7 +228,7 @@
 
   // Send the top bar's "Media" link here instead of Decap's media library.
   document.addEventListener("click", function (e) {
-    var link = e.target.closest && e.target.closest("[class*='-AppHeaderNavLink-']");
+    var link = e.target.closest && e.target.closest("[class*='-AppHeaderButton-'], [class*='-AppHeaderNavLink-']");
     if (!link || !/Media/.test(link.textContent)) return;
     e.preventDefault(); e.stopPropagation();
     open();
