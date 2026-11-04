@@ -163,7 +163,20 @@
       if (el.childNodes.length === 1) { if (el.getAttribute("data-pc-draft") !== DRAFT_WORDS[t]) el.setAttribute("data-pc-draft", DRAFT_WORDS[t]); }
     }
   }
-  new MutationObserver(function () { tagLabels(document.body); }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  // Top bar: a plain "Log out" link instead of Decap's person-shaped menu (it had nothing else in it).
+  function addLogout() {
+    var bar = document.querySelector("[class*='-AppHeaderActions']");
+    if (!bar || bar.querySelector(".pc-logout")) return;
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "pc-logout"; btn.textContent = "Log out";
+    btn.addEventListener("click", function () {
+      var id = window.netlifyIdentity;
+      var done = function () { location.reload(); };
+      try { var r = id && id.logout && id.logout(); if (r && r.then) r.then(done, done); else setTimeout(done, 300); } catch (e) { done(); }
+    });
+    bar.appendChild(btn);
+  }
+  new MutationObserver(function () { tagLabels(document.body); addLogout(); }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
 
   // Which side the first image starts on. Set once when the entry is created (opposite of the newest entry
   // already on the page), then saved with the entry so it never changes. She can switch it.

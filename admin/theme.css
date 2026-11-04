@@ -98,3 +98,9 @@ input[type=date] { display: block; width: 100% !important; max-width: 100% !impo
 input[type=date]::-webkit-date-and-time-value { text-align: left; }
 /* A little more room between the Draft box and the pin checkbox. */
 .pc-pin { margin-top: -4px !important; }
+/* "Log out" link replaces the person icon. */
+[class*='-AppHeaderActions'] [class*='-StyledWrapper']:has([class*='-AvatarDropdownButton']),
+[class*='-AppHeaderActions'] [class*='-SettingsWrapper']:has([class*='-AvatarDropdownButton']) { display: none !important; }
+.pc-logout { font: inherit; font-size: 14px; color: var(--pt-muted); background: none; border: 0; padding: 6px 0 6px 16px; margin-left: 0;
+  border-left: 1px solid var(--pt-rule); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.pc-logout:hover { color: var(--pt-ink); }
