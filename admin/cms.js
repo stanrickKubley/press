@@ -127,14 +127,31 @@
 
   // "Draft" switch at the top: a draft is saved but kept off the page until it's unchecked and published again.
   var DraftCheck = createClass({
+    componentWillUnmount: function () { document.body.classList.remove("pc-is-draft"); },
     render: function () {
       var on = this.props.value === true, onChange = this.props.onChange;
+      document.body.classList.toggle("pc-is-draft", on);
       return h("label", { className: "pc-draft" + (on ? " is-on" : "") },
         h("input", { type: "checkbox", id: this.props.forID, checked: on, onChange: function (e) { onChange(e.target.checked); } }),
         h("span", null, h("strong", null, "Draft"), " — keep this entry off the page for now. Uncheck it and press Publish when it's ready."));
     }
   });
   CMS.registerWidget("draftcheck", DraftCheck);
+
+  // While Draft is checked, Decap's toolbar still says "Publish" / "Published". Tag those labels so the
+  // stylesheet below can show draft wording instead (Decap redraws its toolbar, so keep tagging).
+  var DRAFT_WORDS = { "Published": "Draft saved", "Publish": "Save draft", "Publishing…": "Saving…", "Publishing...": "Saving…",
+    "Publish now": "Save draft", "Publish and create new": "Save draft and create new", "Publish and duplicate": "Save draft and duplicate" };
+  function tagLabels(root) {
+    root.querySelectorAll("[data-pc-draft]").forEach(function (el) { if (!DRAFT_WORDS[el.textContent.trim()]) el.removeAttribute("data-pc-draft"); });
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), n;
+    while ((n = walker.nextNode())) {
+      var t = n.nodeValue.trim(), el = n.parentElement;
+      if (!el || !DRAFT_WORDS[t]) continue;
+      if (el.childNodes.length === 1) { if (el.getAttribute("data-pc-draft") !== DRAFT_WORDS[t]) el.setAttribute("data-pc-draft", DRAFT_WORDS[t]); }
+    }
+  }
+  new MutationObserver(function () { tagLabels(document.body); }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
 
   // Which side the first image starts on. Set once when the entry is created (opposite of the newest entry
   // already on the page), then saved with the entry so it never changes. She can switch it.
@@ -175,6 +192,9 @@
       "[class*='-PreviewButtonContainer']{display:none!important}" +
       ".pc-side{font-size:13px;color:#5d626f;margin:-14px 0 -10px}" +
       ".pc-side button{font:inherit;font-size:13px;color:#3a4a7a;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}" +
+      // Draft wording on Decap's toolbar: hide the original word, show ours.
+      "body.pc-is-draft [data-pc-draft]{font-size:0!important}" +
+      "body.pc-is-draft [data-pc-draft]::before{content:attr(data-pc-draft);font-size:14px}" +
       ".pc-draft{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #cfd2d8;border-radius:6px;background:#fff;font-size:14px;color:#313d3e;cursor:pointer}" +
       ".pc-draft.is-on{background:#fff6dc;border-color:#d9b44a}" +
       ".pc-draft input{width:18px;height:18px;margin:0;accent-color:#3a4a7a;cursor:pointer;flex:none}" +
