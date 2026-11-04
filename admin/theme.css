@@ -90,3 +90,5 @@ body, [class*='-AppMainContainer'] { background: var(--pt-paper) !important; col
 /* Top bar: drop Decap's "/" view-site link; greet her in her site's name font. */
 [class*='-AppHeaderSiteLink-'] { display: none !important; }
 [class*='-AppHeaderActions']::before { content: "Hi Mindy"; font-family: "Abel", "Helvetica Neue", Arial, sans-serif; font-size: 20px; color: var(--pt-ink); margin-right: 16px; white-space: nowrap; }
+/* Keep the greeting beside the profile icon on narrow screens too. */
+[class*='-AppHeaderActions'] { margin-left: auto !important; justify-content: flex-end !important; }
