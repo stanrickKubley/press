@@ -38,7 +38,7 @@
     ".mm-btn.mm-dark{background:#2e3105;color:#feffe9}" +
     ".mm-note{padding:10px 16px;font-size:14px;color:#6f7147;border-bottom:1px solid #d9dab4}" +
     ".mm-note.mm-err{color:#a4262c}.mm-note.mm-ok{color:#2e3105}" +
-    ".mm-grid{overflow:auto;-webkit-overflow-scrolling:touch;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}" +
+    ".mm-grid{overflow:auto;-webkit-overflow-scrolling:touch;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:max-content;align-content:start;flex:1 1 auto;min-height:0;gap:14px}" +
     ".mm-card{position:relative;display:flex;flex-direction:column;height:auto;align-self:start;background:#fff;border:2px solid #d9dab4;border-radius:6px;overflow:hidden;cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit}" +
     ".mm-card.mm-used{cursor:default}.mm-card.mm-on{border-color:#a4262c;box-shadow:0 0 0 2px #a4262c}" +
     ".mm-card img{display:block;flex:none;width:100%;aspect-ratio:1/1;object-fit:contain;background:#f4f4ea}" +
