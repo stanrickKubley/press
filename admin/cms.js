@@ -245,6 +245,16 @@
     var s = document.createElement("style"); s.textContent = css; document.head.appendChild(s);
   })();
 
+  // Decap keeps its own copy of the entry list and doesn't refresh it after a save, so the list could show an old
+  // status. After any save, going back to the list reloads it.
+  var savedSinceList = false;
+  ["postSave", "postPublish", "postUnpublish"].forEach(function (name) {
+    try { CMS.registerEventListener({ name: name, handler: function () { savedSinceList = true; } }); } catch (e) {}
+  });
+  window.addEventListener("hashchange", function () {
+    if (savedSinceList && /^#\/collections\/[^/]+\/?$/.test(location.hash)) { savedSinceList = false; location.reload(); }
+  });
+
   if (window.PRESS_DEMO_READY) window.PRESS_DEMO_READY.then(function () { CMS.init({ config: config }); });
   else CMS.init({ config: config });
 })();
