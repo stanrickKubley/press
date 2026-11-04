@@ -1,0 +1,83 @@
+/* Editor colors to match mindykober.com: cream page, dark olive ink. Overrides Decap's grey/blue look.
+   Decap's class names look like "css-1abc-ListCard-card-card", so selectors match "-Name-" or "-Name " exactly. */
+:root {
+  --pt-paper: #feffe9;   /* page */
+  --pt-card: #ffffff;    /* fields and cards stay white for easy reading */
+  --pt-ink: #2e3105;     /* text, buttons */
+  --pt-ink-2: #4a4d20;   /* hover */
+  --pt-muted: #6f7147;   /* hints */
+  --pt-rule: #d9dab4;    /* borders */
+  --pt-tint: #eef0cf;    /* label tabs, soft fills */
+}
+
+body, [class*='-AppMainContainer'] { background: var(--pt-paper) !important; color: var(--pt-ink); }
+
+/* Top bar and editor toolbar */
+[class*='-AppHeader-'], [class*='-ToolbarContainer'] { background: var(--pt-paper) !important; border-bottom: 1px solid var(--pt-rule) !important; box-shadow: none !important; }
+[class*='-AppHeaderNavLink-'], [class*='-AppHeaderNavLink-'] span { color: var(--pt-muted) !important; }
+[class*='-AppHeaderNavLink-'].header-link-active, [class*='-AppHeaderNavLink-'].header-link-active span,
+[class*='-AppHeaderNavLink-']:hover, [class*='-AppHeaderNavLink-']:hover span { color: var(--pt-ink) !important; }
+[class*='-AppHeaderNavLink-'] [class*='-IconWrapper'] { color: inherit !important; }
+[class*='-AppHeaderActions'] [class*='-StyledDropdownButton-'] { background: var(--pt-ink) !important; color: var(--pt-paper) !important; }
+[class*='-ToolbarSectionMain-'], [class*='-ToolbarSectionBackLink-'], [class*='-ToolbarSectionMeta-'] { border-color: var(--pt-rule) !important; }
+[class*='-BackCollection'], [class*='-BackArrow'] { color: var(--pt-ink) !important; }
+[class*='-BackStatus-'] { color: var(--pt-muted) !important; }
+
+/* Cards: sidebar, collection header, entry rows */
+[class*='-SidebarContainer-'], [class*='-CollectionTopContainer-'], [class*='-ListCard-'], [class*='-GridCard-'] {
+  background: var(--pt-card) !important; box-shadow: none !important; border: 1px solid var(--pt-rule) !important; }
+[class*='-SidebarHeading-'], [class*='-CollectionTopHeading-'], [class*='-ListCardTitle'], [class*='-CardHeading'] { color: var(--pt-ink) !important; }
+[class*='-SidebarNavLink-'] { color: var(--pt-muted) !important; }
+[class*='-SidebarNavLink-'].sidebar-active, [class*='-SidebarNavLink-']:hover { color: var(--pt-ink) !important; background: var(--pt-tint) !important; border-left-color: var(--pt-ink) !important; }
+[class*='-ListCard-']:hover, [class*='-GridCard-']:hover { background: var(--pt-tint) !important; }
+[class*='-SearchInput'] { background: var(--pt-paper) !important; color: var(--pt-ink) !important; }
+[class*='-CollectionTopDescription-'] { color: var(--pt-muted) !important; }
+[class*='-CollectionControlsContainer'] [class*='-StyledDropdownButton-'], [class*='-ViewControlsButton-'] { color: var(--pt-ink) !important; }
+[class*='-CollectionControlsContainer'] [class*='-StyledDropdownButton-']::after { border-top-color: var(--pt-ink) !important; }
+
+/* Dark buttons: + Entry, Publish / Published */
+[class*='-CollectionTopNewButton-'], [class*='-ToolbarDropdown'] [class*='-StyledDropdownButton-'] {
+  background-color: var(--pt-ink) !important; color: var(--pt-paper) !important; }
+[class*='-ToolbarDropdown'] [class*='-StyledDropdownButton-']::after { color: var(--pt-paper) !important; border-top-color: var(--pt-paper) !important; }
+[class*='-CollectionTopNewButton-']:hover, [class*='-ToolbarDropdown'] [class*='-StyledDropdownButton-']:hover { background-color: var(--pt-ink-2) !important; }
+[class*='-DeleteButton-'] { background: transparent !important; color: #a4262c !important; border: 1px solid #e3b7b9 !important; }
+
+/* Dropdown menus */
+[class*='-DropdownList'] { background: var(--pt-card) !important; border: 1px solid var(--pt-rule); }
+[class*='-StyledMenuItem']:hover, [class*='-StyledMenuItem']:focus { background: var(--pt-tint) !important; color: var(--pt-ink) !important; }
+
+/* Editor: left pane, field labels, inputs */
+[class*='-ControlPaneContainer'], [class*='-StyledSplitPane-'] { background: var(--pt-paper) !important; }
+[class*='-StyledSplitPane-'] .Resizer { background: var(--pt-rule) !important; }
+[class*='-FieldLabel-'] { background: var(--pt-tint) !important; color: var(--pt-ink) !important; border-color: var(--pt-rule) !important; }
+[class*='-ControlContainer']:focus-within > [class*='-FieldLabel-'] { background: var(--pt-ink) !important; color: var(--pt-paper) !important; border-color: var(--pt-ink) !important; }
+[class*='-ControlContainer'] input[type=text], [class*='-ControlContainer'] input[type=url], [class*='-ControlContainer'] input[type=date],
+[class*='-ControlContainer'] input:not([type]), [class*='-ControlContainer'] textarea {
+  background-color: var(--pt-card) !important; color: var(--pt-ink) !important; border-color: var(--pt-rule) !important; }
+[class*='-ControlContainer'] input:focus, [class*='-ControlContainer'] textarea:focus { border-color: var(--pt-ink) !important; }
+[class*='-ControlHint'] { color: var(--pt-muted) !important; }
+[class*='-EditorToggle'] { background: var(--pt-card) !important; color: var(--pt-ink) !important; box-shadow: none !important; border: 1px solid var(--pt-rule) !important; }
+
+/* Login screen */
+[class*='-StyledAuthenticationPage'] { background: var(--pt-paper) !important; }
+[class*='-StyledAuthenticationPage'] button { background: var(--pt-ink) !important; color: var(--pt-paper) !important; }
+
+/* Our own widgets: swap the blue accent for olive */
+.pt-wrap { border-color: var(--pt-rule) !important; background: var(--pt-card) !important; }
+.pt-wrap:focus-within { border-color: var(--pt-ink) !important; }
+.pt-bar, .pt-link { background: var(--pt-tint) !important; border-color: var(--pt-rule) !important; }
+.pt-ed a { color: var(--pt-ink) !important; }
+.pi-card { border-color: var(--pt-ink) !important; }
+.pi-btn[aria-pressed=true] { background: var(--pt-ink) !important; border-color: var(--pt-ink) !important; color: var(--pt-paper) !important; }
+.pi-btn, .pi-icon { color: var(--pt-ink) !important; }
+.pi-add { border-color: var(--pt-ink) !important; color: var(--pt-ink) !important; }
+.pi-add:hover, .pi-btn:hover, .pi-icon:hover { background: var(--pt-tint) !important; }
+.pc-show input, .pc-draft input, .pi-check input { accent-color: var(--pt-ink) !important; }
+.pc-show, .pc-side, .pc-side button { color: var(--pt-ink) !important; }
+.pc-draft { border-color: var(--pt-rule) !important; color: var(--pt-ink) !important; background: var(--pt-card) !important; }
+.pc-draft.is-on { background: #fff3c4 !important; border-color: #c9a53a !important; }
+.pv-launch button { border-color: var(--pt-ink) !important; color: var(--pt-ink) !important; background: var(--pt-card) !important; }
+.pv-launch button:hover { background: var(--pt-tint) !important; }
+@media (max-width: 799px) {
+  .pv-launch button { background: var(--pt-ink) !important; color: var(--pt-paper) !important; }
+}
