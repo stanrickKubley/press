@@ -21,7 +21,7 @@
       identifier_field: "title",
       slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}",
       summary: "{{draft | ternary('DRAFT · ', '')}}{{date | date('MMM D, YYYY')}} · {{title | default('No headline')}} · {{publication | default('')}}",
-      sortable_fields: { fields: ["date", "title"], default: { field: "date", direction: "descending" } },
+      sortable_fields: ["date", "title"],
       fields: [
         { name: "draft", label: "Draft", widget: "draftcheck", default: false, required: false },
         { name: "preview_tools", label: "Preview", widget: "pressPreview", required: false },
