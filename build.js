@@ -10,6 +10,9 @@ const SITE = {
   // Same menu as her site. "Publications" is this page.
   nav: [["Artwork", "/artwork"], ["Past Work", "/past-work"], ["Bio", "/bio"], ["Publications", null], ["Contact", "/contact"]],
   instagram: "https://instagram.com/kobermindy",
+  // Where the page really lives: her Squarespace Publications page shows /embed/ in a frame.
+  // Anyone who opens this Netlify page directly is sent there.
+  publicationsUrl: "https://www.mindykober.com/publications",
 };
 
 const ROOT = __dirname;
@@ -54,6 +57,14 @@ const html = `<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abel&family=Source+Code+Pro:ital,wght@0,300;0,400;0,500;1,300&display=swap">
 <link rel="stylesheet" href="press.css">
+<meta name="robots" content="noindex">
+<script>
+  // The real page is on her Squarespace site. Send visitors there, except when this page is handling a login
+  // link from an invite or password-reset email (those land here with a token in the address).
+  if (window.top === window.self && !/(invite|recovery|confirmation|email_change)_token|access_token/.test(location.hash)) {
+    location.replace(${JSON.stringify("https://www.mindykober.com/publications")});
+  }
+</script>
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
@@ -82,6 +93,58 @@ ${feed || '<p class="pf-empty">No features yet.</p>'}
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 fs.writeFileSync(path.join(OUT, "index.html"), html);
+
+// The embed: just the entries, for the frame on her Squarespace Publications page (Squarespace supplies her real
+// header and footer). It tells the frame how tall it is so there's no inner scrollbar, fades in, and opens links
+// in a new tab. Opened on its own, it sends visitors to the real page.
+const embed = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>${SITE.title} — ${SITE.name}</title>
+<base target="_blank">
+<script>if (window.top === window.self) location.replace(${JSON.stringify(SITE.publicationsUrl)});</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abel&family=Source+Code+Pro:ital,wght@0,300;0,400;0,500;1,300&display=swap">
+<link rel="stylesheet" href="/press.css">
+<style>
+  html, body { background: transparent; }
+  body { overflow: hidden; }
+  .pf-page { padding: 0 !important; max-width: none; }
+  .pf-feed { margin-top: 0 !important; max-width: none; padding-bottom: 8px; }
+  @keyframes pf-in { from { opacity: 0; } to { opacity: 1; } }
+  .pf-feed { animation: pf-in .35s ease-out both; }
+</style>
+</head>
+<body>
+<main class="pf-page">
+  <h1 class="pf-sr">${SITE.title}</h1>
+  <div class="pf-feed">
+${feed || '<p class="pf-empty">No features yet.</p>'}
+  </div>
+</main>
+<script>
+  // Tell the Squarespace page how tall this is, now and whenever images load or the width changes.
+  (function () {
+    var last = 0;
+    function send() {
+      var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+      if (h && h !== last) { last = h; parent.postMessage({ type: "mk-press-height", height: h }, "*"); }
+    }
+    if (window.ResizeObserver) new ResizeObserver(send).observe(document.documentElement);
+    window.addEventListener("load", send);
+    document.querySelectorAll("img").forEach(function (im) { im.addEventListener("load", send); });
+    send();
+  })();
+</script>
+</body>
+</html>
+`;
+fs.mkdirSync(path.join(OUT, "embed"), { recursive: true });
+fs.writeFileSync(path.join(OUT, "embed", "index.html"), embed);
 // For the editor: which side each published entry's first image starts on, so a new entry can take the other side.
 fs.writeFileSync(path.join(OUT, "entries.json"), JSON.stringify(posts.map((p) => ({ date: p.date, start_side: p.start_side === "right" ? "right" : "left" }))));
 fs.copyFileSync(path.join(ROOT, "press.css"), path.join(OUT, "press.css"));
