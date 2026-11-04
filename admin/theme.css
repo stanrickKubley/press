@@ -107,3 +107,6 @@ input[type=date]::-webkit-date-and-time-value { text-align: left; }
 /* Greeting in bold; on phones, room between it and the Contents/Media row. */
 [class*='-AppHeaderActions']::before { font-weight: 700; }
 @media (max-width: 799px) { [class*='-AppHeaderActions'] { padding-top: 6px; padding-bottom: 12px; } }
+/* Entry list: draft rows tinted so they stand out from published ones. */
+[class*='-ListCard-'][data-pc-status=draft] { background: #fff6d6 !important; border-color: #d9b44a !important; }
+[class*='-ListCard-'][data-pc-status=draft]:hover { background: #ffefbd !important; }

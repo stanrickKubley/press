@@ -20,7 +20,7 @@
       create: true,
       identifier_field: "title",
       slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}",
-      summary: "{{draft | ternary('DRAFT · ', '')}}{{date | date('MMM D, YYYY')}} · {{title | default('No headline')}} · {{publication | default('')}}",
+      summary: "{{draft | ternary('Draft', 'Published')}}{{pinned | ternary(' · Pinned', '')}} · {{date | date('MMM D, YYYY')}} · {{title | default('No headline')}}",
       sortable_fields: ["date", "title"],
       fields: [
         { name: "draft", label: "Draft", widget: "draftcheck", default: false, required: false },
@@ -176,7 +176,16 @@
     });
     bar.appendChild(btn);
   }
-  new MutationObserver(function () { tagLabels(document.body); addLogout(); }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  // Entry list: mark each row with its status so drafts can be tinted.
+  function tagRows() {
+    document.querySelectorAll("[class*='-ListCardTitle']").forEach(function (el) {
+      var st = /^Draft\b/.test(el.textContent.trim()) ? "draft" : "published";
+      if (el.getAttribute("data-pc-status") !== st) el.setAttribute("data-pc-status", st);
+      var card = el.closest("[class*='-ListCard-']");
+      if (card && card.getAttribute("data-pc-status") !== st) card.setAttribute("data-pc-status", st);
+    });
+  }
+  new MutationObserver(function () { tagLabels(document.body); addLogout(); tagRows(); }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
 
   // Which side the first image starts on. Set once when the entry is created (opposite of the newest entry
   // already on the page), then saved with the entry so it never changes. She can switch it.
