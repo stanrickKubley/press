@@ -12,7 +12,7 @@
     {
       "image": "/images/uploads/20261104-130757-0-flare-banner.webp",
       "placement": "auto",
-      "size": "auto",
+      "size": "small",
       "border": true,
       "caption": "",
       "w": 1024,
@@ -21,7 +21,7 @@
     {
       "image": "/images/uploads/20261104-131030-0-myheart.png",
       "placement": "auto",
-      "size": "small",
+      "size": "xsmall",
       "border": true,
       "caption": "My Heart",
       "w": 906,
@@ -30,7 +30,7 @@
     {
       "image": "/images/uploads/20261104-131030-1-originofbackpain.png",
       "placement": "auto",
-      "size": "small",
+      "size": "xsmall",
       "border": true,
       "caption": "The Origins of Back Pain",
       "w": 909,
