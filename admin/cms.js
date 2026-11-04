@@ -245,38 +245,6 @@
     var s = document.createElement("style"); s.textContent = css; document.head.appendChild(s);
   })();
 
-  // Decap keeps its own copy of the entry list and doesn't refresh it after a save, so the list could show an old
-  // status. Coming back to the list after a save reloads it, behind a quick fade so it doesn't flash.
-  // (Decap changes pages without a "hashchange" event, so watch the address on every redraw.)
-  var lastHash = location.hash, savedSinceList = false;
-  ["postSave", "postPublish", "postUnpublish"].forEach(function (name) {
-    try { CMS.registerEventListener({ name: name, handler: function () { savedSinceList = true; } }); } catch (e) {}
-  });
-  function noteSaving() {
-    var bar = document.querySelector("[class*='-ToolbarContainer']");
-    if (bar && /Publishing|Saving|Unpublishing|Deleting/.test(bar.textContent)) savedSinceList = true;
-  }
-  function softReload() {
-    var cover = document.createElement("div");
-    cover.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#feffe9;opacity:0;transition:opacity .15s ease";
-    document.body.appendChild(cover);
-    requestAnimationFrame(function () { cover.style.opacity = "1"; });
-    setTimeout(function () { location.reload(); }, 160);
-  }
-  function checkHash() {
-    noteSaving();
-    var h = location.hash;
-    if (h === lastHash) return;
-    var fromEntry = /\/collections\/[^/]+\/(entries\/|new)/.test(lastHash);
-    var toList = /^#\/collections\/[^/]+\/?$/.test(h);
-    lastHash = h;
-    if (fromEntry && toList && savedSinceList) { savedSinceList = false; softReload(); }
-    else if (!fromEntry) savedSinceList = false;
-  }
-  new MutationObserver(checkHash).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
-  window.addEventListener("popstate", checkHash);
-  window.addEventListener("hashchange", checkHash);
-
   if (window.PRESS_DEMO_READY) window.PRESS_DEMO_READY.then(function () { CMS.init({ config: config }); });
   else CMS.init({ config: config });
 })();
