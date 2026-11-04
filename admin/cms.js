@@ -24,6 +24,7 @@
       sortable_fields: ["date", "title"],
       fields: [
         { name: "draft", label: "Draft", widget: "draftcheck", default: false, required: false },
+        { name: "pinned", label: "Pin to the top", widget: "pincheck", default: false, required: false },
         { name: "preview_tools", label: "Preview", widget: "pressPreview", required: false },
         { name: "publication", label: "Publication", widget: "string", required: false,
           hint: "This will list the publication small, next to the date." },
@@ -138,6 +139,17 @@
   });
   CMS.registerWidget("draftcheck", DraftCheck);
 
+  // "Pin to the top": a pinned entry shows first on the page, above newer ones.
+  var PinCheck = createClass({
+    render: function () {
+      var on = this.props.value === true, onChange = this.props.onChange;
+      return h("label", { className: "pc-show pc-pin" },
+        h("input", { type: "checkbox", id: this.props.forID, checked: on, onChange: function (e) { onChange(e.target.checked); } }),
+        h("span", null, "Pin to the top of the page (shows first, above newer entries)"));
+    }
+  });
+  CMS.registerWidget("pincheck", PinCheck);
+
   // While Draft is checked, Decap's toolbar still says "Publish" / "Published". Tag those labels so the
   // stylesheet below can show draft wording instead (Decap redraws its toolbar, so keep tagging).
   var DRAFT_WORDS = { "Published": "Draft saved", "Publish": "Save draft", "Publishing…": "Saving…", "Publishing...": "Saving…",
@@ -185,7 +197,7 @@
   (function () {
     var css =
       // Show-on-page checkboxes: hide their grey label tab and tuck them up under the field above.
-      "label[for^='draft'],label[for^='show_publication'],label[for^='show_date'],label[for^='show_title'],label[for^='start_side'],label[for^='preview_tools']{display:none!important}" +
+      "label[for^='draft'],label[for^='pinned'],label[for^='show_publication'],label[for^='show_date'],label[for^='show_title'],label[for^='start_side'],label[for^='preview_tools']{display:none!important}" +
       ".pv-launch button{font:inherit;font-size:14px;padding:10px 16px;border-radius:6px;border:1px solid #1d1f22;background:#fff;color:#1d1f22;cursor:pointer;width:100%}" +
       ".pv-launch button:hover{background:#f6f7f9}" +
       // Decap's own "Check for Preview" (deploy previews) would be confused with ours.
