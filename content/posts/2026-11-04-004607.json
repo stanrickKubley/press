@@ -1,0 +1,38 @@
+{
+  "show_publication": true,
+  "show_date": true,
+  "show_title": true,
+  "date": "2026-11-03",
+  "start_side": "left",
+  "body": "There's a particular kind of quiet that settles over a city just before sunrise. The streetlights are still on, but they've lost their urgency, and the first delivery trucks rumble past like they're trying not to wake anyone. I've started taking walks at this hour, mostly because it's the only time my mind feels uncluttered. There are no notifications yet and no meetings, just the sound of my own footsteps and the occasional bird that's decided to start the day early. It's become a small ritual, and I'm surprised how much I've come to rely on it.\n\nSome mornings I bring a notebook. Most mornings I don't.\n\nWhat I've learned is that the walk itself matters less than the permission it gives me to slow down. We spend so much of the day reacting to whatever lands in front of us that we rarely get to choose where our attention goes. Those twenty minutes before the world wakes up are mine. I don't use them to solve problems or plan my week. I just notice things: the bakery on the corner propping its door open, the way the light hits the river differently in November, the neighbor who waves every single time without fail. None of it is remarkable on its own, but together it reminds me that most of life happens in the small, unhurried moments we usually rush past.",
+  "images": [
+    {
+      "image": "/images/uploads/20261103-164456-0-kill-bill-vol-1-kd3dqe.jpeg",
+      "placement": "auto",
+      "size": "auto",
+      "border": true,
+      "caption": "",
+      "w": 1558,
+      "h": 880
+    },
+    {
+      "image": "/images/uploads/20261103-164456-1-pulp-fiction-movie-screenshots2.jpg",
+      "placement": "auto",
+      "size": "small",
+      "border": true,
+      "caption": "",
+      "w": 936,
+      "h": 395
+    },
+    {
+      "image": "/images/uploads/20261103-164521-0-dangsplashimagefinal.jpg",
+      "placement": "auto",
+      "size": "auto",
+      "border": true,
+      "caption": "",
+      "w": 2382,
+      "h": 3000
+    }
+  ],
+  "title": "A Test Post"
+}
