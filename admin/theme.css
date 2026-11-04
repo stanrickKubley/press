@@ -96,3 +96,5 @@ body, [class*='-AppMainContainer'] { background: var(--pt-paper) !important; col
 input[type=date] { display: block; width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important;
   -webkit-appearance: none; appearance: none; min-height: 3em; }
 input[type=date]::-webkit-date-and-time-value { text-align: left; }
+/* A little more room between the Draft box and the pin checkbox. */
+.pc-pin { margin-top: -4px !important; }
