@@ -196,11 +196,15 @@
       token().then(function (tok) {
         return api(tok, "git/refs/heads/main").then(function (ref) {
           var base = ref.object.sha;
+          // Rebuild the full file list without the deleted images (GitHub sometimes rejects "remove" entries).
+          var gone = {}; list.forEach(function (it) { gone[it.path] = true; });
           return api(tok, "git/commits/" + base).then(function (commit) {
-            return api(tok, "git/trees", "POST", {
-              base_tree: commit.tree.sha,
-              tree: list.map(function (it) { return { path: it.path, mode: "100644", type: "blob", sha: null }; })
-            });
+            return api(tok, "git/trees/" + commit.tree.sha + "?recursive=1");
+          }).then(function (full) {
+            if (full.truncated) throw new Error("too many files to list");
+            var keep = full.tree.filter(function (e) { return e.type === "blob" && !gone[e.path]; })
+              .map(function (e) { return { path: e.path, mode: e.mode, type: "blob", sha: e.sha }; });
+            return api(tok, "git/trees", "POST", { tree: keep });
           }).then(function (tree) {
             return api(tok, "git/commits", "POST", {
               message: "Delete " + list.length + " unused image" + (list.length === 1 ? "" : "s") + "\n\n" + list.map(function (it) { return "- " + it.name; }).join("\n"),
