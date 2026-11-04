@@ -110,3 +110,5 @@ input[type=date]::-webkit-date-and-time-value { text-align: left; }
 /* Entry list: draft rows tinted so they stand out from published ones. */
 [class*='-ListCard-'][data-pc-status=draft] { background: #fff6d6 !important; border-color: #d9b44a !important; }
 [class*='-ListCard-'][data-pc-status=draft]:hover { background: #ffefbd !important; }
+/* While an existing login is being restored, keep the login screen hidden (see index.html). */
+html.pc-restoring [class*='-StyledAuthenticationPage'] { visibility: hidden !important; }

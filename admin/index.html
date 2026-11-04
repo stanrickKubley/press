@@ -7,6 +7,19 @@
   <link rel="icon" type="image/png" href="/images/favicon.png">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abel&display=swap">
   <link rel="stylesheet" href="theme.css">
+  <script>
+    // Already logged in? Hide Decap's login screen while it re-checks the login on load, so it doesn't flash.
+    try {
+      if (localStorage.getItem("gotrue.user")) {
+        document.documentElement.classList.add("pc-restoring");
+        var done = function () { document.documentElement.classList.remove("pc-restoring"); };
+        setTimeout(done, 5000); // if the login really did expire, show the login screen after all
+        new MutationObserver(function (m, o) {
+          if (document.querySelector("[class*='-AppMainContainer']")) { done(); o.disconnect(); }
+        }).observe(document.documentElement, { childList: true, subtree: true });
+      }
+    } catch (e) {}
+  </script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
