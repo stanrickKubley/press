@@ -145,7 +145,7 @@
       var on = this.props.value === true, onChange = this.props.onChange;
       return h("label", { className: "pc-show pc-pin" },
         h("input", { type: "checkbox", id: this.props.forID, checked: on, onChange: function (e) { onChange(e.target.checked); } }),
-        h("span", null, "Pin to the top of the page (shows first, above newer entries)"));
+        h("span", null, "Pin to the top of the page"));
     }
   });
   CMS.registerWidget("pincheck", PinCheck);
