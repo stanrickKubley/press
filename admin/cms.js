@@ -246,14 +246,20 @@
   })();
 
   // Decap keeps its own copy of the entry list and doesn't refresh it after a save, so the list could show an old
-  // status. After any save, going back to the list reloads it.
-  var savedSinceList = false;
-  ["postSave", "postPublish", "postUnpublish"].forEach(function (name) {
-    try { CMS.registerEventListener({ name: name, handler: function () { savedSinceList = true; } }); } catch (e) {}
-  });
-  window.addEventListener("hashchange", function () {
-    if (savedSinceList && /^#\/collections\/[^/]+\/?$/.test(location.hash)) { savedSinceList = false; location.reload(); }
-  });
+  // status. Coming back to the list from an entry reloads it. (Decap changes pages without a "hashchange" event,
+  // so watch the address on every redraw.)
+  var lastHash = location.hash;
+  function checkHash() {
+    var h = location.hash;
+    if (h === lastHash) return;
+    var fromEntry = /\/collections\/[^/]+\/(entries\/|new)/.test(lastHash);
+    var toList = /^#\/collections\/[^/]+\/?$/.test(h);
+    lastHash = h;
+    if (fromEntry && toList) location.reload();
+  }
+  new MutationObserver(checkHash).observe(document.documentElement, { childList: true, subtree: true });
+  window.addEventListener("popstate", checkHash);
+  window.addEventListener("hashchange", checkHash);
 
   if (window.PRESS_DEMO_READY) window.PRESS_DEMO_READY.then(function () { CMS.init({ config: config }); });
   else CMS.init({ config: config });
