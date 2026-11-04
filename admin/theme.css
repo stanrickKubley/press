@@ -92,3 +92,7 @@ body, [class*='-AppMainContainer'] { background: var(--pt-paper) !important; col
 [class*='-AppHeaderActions']::before { content: "Hi, Mindy!"; font-family: "Abel", "Helvetica Neue", Arial, sans-serif; font-size: 20px; color: var(--pt-ink); margin-right: 16px; white-space: nowrap; }
 /* Keep the greeting beside the profile icon on narrow screens too. */
 [class*='-AppHeaderActions'] { margin-left: auto !important; justify-content: flex-end !important; }
+/* iPhone draws date boxes at a fixed minimum width that can run off the screen; make it fit like the other fields. */
+input[type=date] { display: block; width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important;
+  -webkit-appearance: none; appearance: none; min-height: 3em; }
+input[type=date]::-webkit-date-and-time-value { text-align: left; }
