@@ -11,7 +11,7 @@
     {
       "image": "/images/uploads/20261103-172826-0-2f8fe8fa-a09f-4dae-93f0-a8ceef7ba748.jpeg",
       "placement": "auto",
-      "size": "auto",
+      "size": "xsmall",
       "border": true,
       "caption": "",
       "w": 1290,
@@ -20,7 +20,7 @@
     {
       "image": "/images/uploads/20261103-172826-1-img-3374.jpg",
       "placement": "auto",
-      "size": "auto",
+      "size": "xsmall",
       "border": true,
       "caption": "",
       "w": 2250,
@@ -29,7 +29,7 @@
     {
       "image": "/images/uploads/20261103-172826-2-img-3264.jpg",
       "placement": "auto",
-      "size": "auto",
+      "size": "xsmall",
       "border": true,
       "caption": "",
       "w": 2250,
