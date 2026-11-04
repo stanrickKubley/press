@@ -85,4 +85,4 @@ body, [class*='-AppMainContainer'] { background: var(--pt-paper) !important; col
 /* Only one collection, so the sidebar keeps just the search box; Quick add duplicates "+ Entry". */
 [class*='-SidebarHeading-'], [class*='-SidebarNavList'] { display: none !important; }
 [class*='-SidebarContainer-'] { padding-top: 12px !important; padding-bottom: 12px !important; }
-[class*='-AppHeaderActions'] [class*='-StyledWrapper']:has(> [class*='-StyledDropdownButton-']) { display: none !important; }
+[class*='-AppHeaderActions'] > [class*='-StyledWrapper']:has([class*='-StyledDropdownButton-']) { display: none !important; }
