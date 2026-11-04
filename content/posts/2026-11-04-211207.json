@@ -1,0 +1,42 @@
+{
+  "draft": false,
+  "body": "I’m honored for my paintings “My Heart” and “Origins of Spinal Disorders” to be included in the 5th issue of Flare Magazine. *FLARE Magazine* strives to be a safe and inclusive space for chronically ill and disabled writers and artists and those who struggle with their mental health to share their writing and art with the community. Please take a look at Issue 5 at [Issue 5 – FLARE Magazine](https://flare-magazine.com/current-issue/) and Check out Flare Magazine’s IG at @flarelitmag",
+  "show_publication": true,
+  "publication": "FLARE MAGAZINE",
+  "date": "2026-11-04",
+  "show_date": true,
+  "start_side": "right",
+  "show_title": true,
+  "title": "FLARE MAGAZINE",
+  "images": [
+    {
+      "image": "/images/uploads/20261104-130757-0-flare-banner.webp",
+      "placement": "auto",
+      "size": "auto",
+      "border": true,
+      "caption": "",
+      "w": 1024,
+      "h": 341
+    },
+    {
+      "image": "/images/uploads/20261104-131030-0-myheart.png",
+      "placement": "auto",
+      "size": "small",
+      "border": true,
+      "caption": "My Heart",
+      "w": 906,
+      "h": 1333
+    },
+    {
+      "image": "/images/uploads/20261104-131030-1-originofbackpain.png",
+      "placement": "auto",
+      "size": "small",
+      "border": true,
+      "caption": "The Origins of Back Pain",
+      "w": 909,
+      "h": 1450
+    }
+  ],
+  "pinned": false,
+  "link": "https://flare-magazine.com/current-issue/"
+}
