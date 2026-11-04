@@ -28,7 +28,9 @@ function copyDir(src, dest) {
 const posts = (fs.existsSync(POSTS) ? fs.readdirSync(POSTS) : [])
   .filter((f) => f.endsWith(".json"))
   .map((f) => ({ file: f, ...JSON.parse(fs.readFileSync(path.join(POSTS, f), "utf8")) }))
-  .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  .filter((p) => p.draft !== true) // drafts stay off the page
+  // Newest date first; entries on the same day: the one created last goes first (file names carry the creation time).
+  .sort((a, b) => String(b.date).localeCompare(String(a.date)) || b.file.localeCompare(a.file));
 
 const used = new Set();
 const feed = posts.map((p) => {

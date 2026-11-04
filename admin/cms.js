@@ -5,7 +5,6 @@
   var config = {
     load_config_file: false,
     backend: demo ? { name: "test-repo" } : { name: "git-gateway", branch: "main" },
-    publish_mode: "editorial_workflow",
     media_folder: "images/uploads",
     public_folder: demo ? "images/uploads" : "/images/uploads",
     site_url: demo ? undefined : "/",
@@ -21,9 +20,10 @@
       create: true,
       identifier_field: "title",
       slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}",
-      summary: "{{date | date('MMM D, YYYY')}} · {{title | default('No headline')}} · {{publication | default('')}}",
-      sortable_fields: ["date", "title"],
+      summary: "{{draft | ternary('DRAFT · ', '')}}{{date | date('MMM D, YYYY')}} · {{title | default('No headline')}} · {{publication | default('')}}",
+      sortable_fields: { fields: ["date", "title"], default: { field: "date", direction: "descending" } },
       fields: [
+        { name: "draft", label: "Draft", widget: "draftcheck", default: false, required: false },
         { name: "preview_tools", label: "Preview", widget: "pressPreview", required: false },
         { name: "publication", label: "Publication", widget: "string", required: false,
           hint: "This will list the publication small, next to the date." },
@@ -125,6 +125,17 @@
   });
   CMS.registerWidget("showcheck", ShowCheck);
 
+  // "Draft" switch at the top: a draft is saved but kept off the page until it's unchecked and published again.
+  var DraftCheck = createClass({
+    render: function () {
+      var on = this.props.value === true, onChange = this.props.onChange;
+      return h("label", { className: "pc-draft" + (on ? " is-on" : "") },
+        h("input", { type: "checkbox", id: this.props.forID, checked: on, onChange: function (e) { onChange(e.target.checked); } }),
+        h("span", null, h("strong", null, "Draft"), " — keep this entry off the page for now. Uncheck it and press Publish when it's ready."));
+    }
+  });
+  CMS.registerWidget("draftcheck", DraftCheck);
+
   // Which side the first image starts on. Set once when the entry is created (opposite of the newest entry
   // already on the page), then saved with the entry so it never changes. She can switch it.
   function loadEntries() {
@@ -157,13 +168,16 @@
   (function () {
     var css =
       // Show-on-page checkboxes: hide their grey label tab and tuck them up under the field above.
-      "label[for^='show_publication'],label[for^='show_date'],label[for^='show_title'],label[for^='start_side'],label[for^='preview_tools']{display:none!important}" +
+      "label[for^='draft'],label[for^='show_publication'],label[for^='show_date'],label[for^='show_title'],label[for^='start_side'],label[for^='preview_tools']{display:none!important}" +
       ".pv-launch button{font:inherit;font-size:14px;padding:10px 16px;border-radius:6px;border:1px solid #1d1f22;background:#fff;color:#1d1f22;cursor:pointer;width:100%}" +
       ".pv-launch button:hover{background:#f6f7f9}" +
       // Decap's own "Check for Preview" (deploy previews) would be confused with ours.
       "[class*='-PreviewButtonContainer']{display:none!important}" +
       ".pc-side{font-size:13px;color:#5d626f;margin:-14px 0 -10px}" +
       ".pc-side button{font:inherit;font-size:13px;color:#3a4a7a;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}" +
+      ".pc-draft{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #cfd2d8;border-radius:6px;background:#fff;font-size:14px;color:#313d3e;cursor:pointer}" +
+      ".pc-draft.is-on{background:#fff6dc;border-color:#d9b44a}" +
+      ".pc-draft input{width:18px;height:18px;margin:0;accent-color:#3a4a7a;cursor:pointer;flex:none}" +
       ".pc-show{display:flex;align-items:center;gap:10px;margin:-14px 0 0;padding:0 2px;font-size:14px;color:#313d3e;cursor:pointer}" +
       ".pc-show input{width:18px;height:18px;margin:0;accent-color:#3a4a7a;cursor:pointer}" +
       "@media (max-width: 799px) {" +
