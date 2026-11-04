@@ -20,7 +20,7 @@
       create: true,
       identifier_field: "title",
       slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}",
-      summary: "{{draft | ternary('Draft', 'Published')}}{{pinned | ternary(' · Pinned', '')}} · {{date | date('MMM D, YYYY')}} · {{title | default('No headline')}}",
+      summary: "{{date | date('MMM D, YYYY')}} · {{title | default('No headline')}} · {{draft | ternary('Draft', 'Published')}}{{pinned | ternary(' · Pinned', '')}}",
       sortable_fields: ["date", "title"],
       fields: [
         { name: "draft", label: "Draft", widget: "draftcheck", default: false, required: false },
@@ -179,7 +179,7 @@
   // Entry list: mark each row with its status so drafts can be tinted.
   function tagRows() {
     document.querySelectorAll("[class*='-ListCardTitle']").forEach(function (el) {
-      var st = /^Draft\b/.test(el.textContent.trim()) ? "draft" : "published";
+      var st = /· Draft( · Pinned)?$/.test(el.textContent.trim()) ? "draft" : "published";
       if (el.getAttribute("data-pc-status") !== st) el.setAttribute("data-pc-status", st);
       var card = el.closest("[class*='-ListCard-']");
       if (card && card.getAttribute("data-pc-status") !== st) card.setAttribute("data-pc-status", st);
